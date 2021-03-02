@@ -79,6 +79,7 @@
 //____________________________________________________________________________
 
 #include <string>
+#include <vector>
 #include <sstream>
 #include <cassert>
 
@@ -207,7 +208,7 @@ int main(int argc, char ** argv)
     << "\n** grwght1scan: Will start processing events promptly."
     << "\nHere is a summary of inputs: "
     << "\n - Input event file: " << gOptInpFilename
-    << "\n - Processing: " << nev << " events in the range [" << nfirst << ", " << nlast << "]"
+    << "\n - Processing: " << nev << " events in the range [" << nfirst << ", " << nlast << "], of " << nev_in_file << " total events in the file."
     << "\n - Systematic parameter to tweak: " << GSyst::AsString(gOptSyst)
     << "\n - Number of tweak dial values in [" << gOptMinTwk << ", " << gOptMaxTwk << "] : " << gOptInpNTwk
     << "\n - Neutrino species to reweight : " << gOptNu
@@ -216,10 +217,15 @@ int main(int argc, char ** argv)
     << "\n\n";
 
 
+  // Make an output tree for saving the weights. As only considering
+  // varying a single systematic use this for name of tree.
+  TFile * wght_file = new TFile(gOptOutFilename.c_str(), "RECREATE");
+  std::vector<TTree*> wght_tree(n_points);
+
   // Declare the weights and twkdial arrays
   const int n_events = (const int) nev;
-  float weights  [n_events][n_points];
-  float twkdials [n_events][n_points];
+  //float weights  [n_events][n_points];
+  //float twkdials [n_events][n_points];
 
   // Create a GReWeight object and add to it a set of weight calculators
 
@@ -307,8 +313,19 @@ int main(int argc, char ** argv)
      syst.Set(gOptSyst, twk_dial);
      rw.Reconfigure();
 
+     
+     wght_file->cd();
+     std::string tree_name=GSyst::AsString(gOptSyst)+"_twk"+std::to_string(ith_dial);
+     wght_tree[ith_dial] = new TTree(tree_name.c_str(),"GENIE weights tree");
+
+     double wght=1.;
+     int iev=nfirst;
+     wght_tree[ith_dial]->Branch("iev",&iev,"iev/I");
+     wght_tree[ith_dial]->Branch("twk_dial",&twk_dial,"twk_dial/D");
+     wght_tree[ith_dial]->Branch("wght",&wght,"wght/D");
+
      // Event loop
-     for (int iev = nfirst; iev <= nlast; iev++) {
+     for (iev = nfirst; iev <= nlast; iev++) {
 
           if(iev%100 == 0) {
               LOG("grwght1scan", pNOTICE)
@@ -320,17 +337,12 @@ int main(int argc, char ** argv)
           EventRecord & event = *(mcrec->event);
           LOG("grwght1scan", pINFO) << "Event: " << iev << "\n" << event;
 
-          // Reset arrays
-          int idx = iev - nfirst;
-          weights  [idx][ith_dial] = -99999.0;
-          twkdials [idx][ith_dial] = twk_dial;
-
           // Reweight this event?
           int nupdg = event.Probe()->Pdg();
           bool do_reweight = gOptNu.ExistsInPDGCodeList(nupdg);
 
           // Calculate weight
-          double wght=1.;
+	  wght=1.;
           if ( do_reweight ) {
              wght = rw.CalcWeight(event);
           }
@@ -338,7 +350,9 @@ int main(int argc, char ** argv)
           // Print/store
           LOG("grwght1scan", pDEBUG)
               << "Overall weight = " << wght;
-          weights[idx][ith_dial] = wght;
+
+	  //Fill tree
+	  wght_tree[ith_dial]->Fill();
 
           // Clean-up
           mcrec->Clear();
@@ -355,6 +369,7 @@ int main(int argc, char ** argv)
 
   // Make an output tree for saving the weights. As only considering
   // varying a single systematic use this for name of tree.
+  /*
   TFile * wght_file = new TFile(gOptOutFilename.c_str(), "RECREATE");
   TTree * wght_tree = new TTree(GSyst::AsString(gOptSyst).c_str(),
                                 "GENIE weights tree");
@@ -377,17 +392,21 @@ int main(int argc, char ** argv)
     } // twk_dial loop
     wght_tree->Fill();
   }
-
+  */
   wght_file->cd();
-  wght_tree->Write();
-  delete wght_tree;
-  wght_tree = 0;
+  for (int ith_dial = 0; ith_dial < n_points; ith_dial++) {
+    wght_tree[ith_dial]->Write();
+    delete wght_tree[ith_dial];
+    wght_tree[ith_dial] = 0;
+  }
   wght_file->Close();
 
   LOG("grwght1scan", pNOTICE)  << "Done!";
 
   return 0;
 }
+
+
 //___________________________________________________________________
 void GetCommandLineArgs(int argc, char ** argv)
 {
