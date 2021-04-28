@@ -20,7 +20,8 @@ GENIE_REWEIGHT_LIBS  = $(shell $(GENIE_REWEIGHT)/src/scripts/setup/genie-reweigh
 LIBRARIES  := $(LIBRARIES) $(CERN_LIBRARIES) $(GENIE_LIBS) $(GENIE_REWEIGHT_LIBS)
 
 TGT_BASE =  grwght1p   \
-            grwghtnp   
+            grwghtnp   \
+            grwght_SL   
 
 TGT = $(addprefix $(GENIE_REWEIGHT_BIN_PATH)/,$(TGT_BASE))
 
@@ -44,6 +45,11 @@ $(GENIE_REWEIGHT_BIN_PATH)/grwghtnp: gRwghtNCorrelatedParams.o $(call find_libs,
 	@echo "** Building grwghtnp"
 	$(LD) $(LDFLAGS) gRwghtNCorrelatedParams.o $(LIBRARIES) -o $(GENIE_REWEIGHT_BIN_PATH)/grwghtnp
 
+# Shirley's one
+#
+$(GENIE_REWEIGHT_BIN_PATH)/grwght_SL: gRwght_SL.o $(call find_libs,grwghtnp)
+	@echo "** Building grwghtnp"
+	$(LD) $(LDFLAGS) gRwght_SL.o $(LIBRARIES) -o $(GENIE_REWEIGHT_BIN_PATH)/grwght_SL
 
 %.o : %.cxx
 	$(CXX) $(CXXFLAGS) -MMD -MP -c $(CPP_INCLUDES) $< -o $@

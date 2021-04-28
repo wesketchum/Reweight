@@ -96,7 +96,10 @@ bool GReWeightNuXSecNCRES::IsHandled(GSyst_t syst) const
 //_______________________________________________________________________________________
 bool GReWeightNuXSecNCRES::AppliesTo(ScatteringType_t type, bool is_cc) const
 {
-  if (type==kScResonant && !is_cc) {
+  //if (type==kScResonant && !is_cc) {
+  //  return true;
+  //}
+  if (type==kScResonant) {
     return true;
   }
   return false;
@@ -172,13 +175,16 @@ double GReWeightNuXSecNCRES::CalcWeight(const genie::EventRecord & event)
 {
   bool is_res = event.Summary()->ProcInfo().IsResonant();
   bool is_nc  = event.Summary()->ProcInfo().IsWeakNC();
-  if(!is_res || !is_nc) return 1.;
+  bool is_em  = event.Summary()->ProcInfo().IsEM();
+  //if(!is_res || !is_nc) return 1.;
+  if(!is_res || !is_em) return 1.;
 
   int nupdg = event.Probe()->Pdg();
-  if(nupdg==kPdgNuMu     && !fRewNumu   ) return 1.;
-  if(nupdg==kPdgAntiNuMu && !fRewNumubar) return 1.;
-  if(nupdg==kPdgNuE      && !fRewNue    ) return 1.;
-  if(nupdg==kPdgAntiNuE  && !fRewNuebar ) return 1.;
+  // Let's just try reweighting all probes
+  //if(nupdg==kPdgNuMu     && !fRewNumu   ) return 1.;
+  //if(nupdg==kPdgAntiNuMu && !fRewNumubar) return 1.;
+  //if(nupdg==kPdgNuE      && !fRewNue    ) return 1.;
+  //if(nupdg==kPdgAntiNuE  && !fRewNuebar ) return 1.;
 
   if(fMode==kModeMaMv) {
      double wght = this->CalcWeightMaMv(event);
