@@ -8,7 +8,7 @@ min_twk=-2
 max_twk=2
 
 knobs=(
-#    "FrAbs_N"
+    "FrAbs_N"
     "FrInel_N"
     "FrPiProd_N"
     "FrCEx_N"
@@ -27,7 +27,7 @@ knobs=(
 
 for k in "${knobs[@]}"; do
     echo "Launch knob $k"
-    out_filename="${output_loc}/weights_${k}.root"
+    out_filename="${output_loc}/weights_${k}_FSIFix.root"
     log_file="weights_${k}.log"
     echo $out_filename
     grwght1p -f $input_file -s $k -t $ntwk --min-tweak $min_twk --max-tweak $max_twk --seed $seed -p 11 -o $out_filename >& $log_file &
