@@ -60,8 +60,13 @@ typedef enum EGSyst {
   kXSecTwkDial_NormNCRES,         ///< tweak NCRES normalization
   kXSecTwkDial_MaNCRESshape,      ///< tweak Ma NCRES, affects d2sigma(NCRES)/dWdQ2 in shape only (normalized to constant integral)
   kXSecTwkDial_MvNCRESshape,      ///< tweak Mv NCRES, affects d2sigma(NCRES)/dWdQ2 in shape only (normalized to constant integral)
+  kXSecTwkDial_NormEMRES, 	  ///< tweak EMRES normalization
+  kXSecTwkDial_MaEMRESshape,      ///< tweak Ma EMRES, affects d2sigma(EMRES)/dWdQ2 in shape only (normalized to constant integral) 
+  kXSecTwkDial_MvEMRESshape,      ///< tweak Mv EMRES, affects d2sigma(EMRES)/dWdQ2 in shape only (normalized to constant integral)
   kXSecTwkDial_MaNCRES,           ///< tweak Ma NCRES, affects d2sigma(NCRES)/dWdQ2 both in shape and normalization
   kXSecTwkDial_MvNCRES,           ///< tweak Mv NCRES, affects d2sigma(NCRES)/dWdQ2 both in shape and normalization
+  kXSecTwkDial_MaEMRES,		  ///< tweak Ma EMRES, affects d2sigma(EMRES)/dWdQ2 both in shape and normazliation
+  kXSecTwkDial_MvEMRES, 	  ///< tweak Mv EMRES, affects d2sigma(EMRES)/dWdQ2 both in shape and normazliation
   // Coherent pion production tweaking parameters:
   kXSecTwkDial_MaCOHpi,           ///< tweak Ma for COH pion production
   kXSecTwkDial_R0COHpi,           ///< tweak R0 for COH pion production
@@ -96,6 +101,7 @@ typedef enum EGSyst {
   kXSecTwkDial_DISNuclMod,        ///< tweak DIS nuclear modification (shadowing, anti-shadowing, EMC)
   //
   kXSecTwkDial_NC,                ///<
+  kXSecTwkDial_EM,		  ///<
 
 
   //
@@ -215,12 +221,17 @@ public:
      case ( kXSecTwkDial_MaCCRESshape     ) : return "MaCCRESshape";         break;
      case ( kXSecTwkDial_MvCCRESshape     ) : return "MvCCRESshape";         break;
      case ( kXSecTwkDial_MaCCRES          ) : return "MaCCRES";              break;
-     case ( kXSecTwkDial_MvCCRES          ) : return "MvCCRES";              break;
+     case ( kXSecTwkDial_MvCCRES          ) : return "MvCCRES";              break;					      
      case ( kXSecTwkDial_NormNCRES        ) : return "NormNCRES";            break;
      case ( kXSecTwkDial_MaNCRESshape     ) : return "MaNCRESshape";         break;
      case ( kXSecTwkDial_MvNCRESshape     ) : return "MvNCRESshape";         break;
      case ( kXSecTwkDial_MaNCRES          ) : return "MaNCRES";              break;
-     case ( kXSecTwkDial_MvNCRES          ) : return "MvNCRES";              break;
+     case ( kXSecTwkDial_MvNCRES          ) : return "MvNCRES";              break;					      					      
+     case ( kXSecTwkDial_NormEMRES        ) : return "NormEMRES";            break;
+     case ( kXSecTwkDial_MaEMRESshape     ) : return "MaEMRESshape";         break;
+     case ( kXSecTwkDial_MvEMRESshape     ) : return "MvEMRESshape";         break;
+     case ( kXSecTwkDial_MaEMRES          ) : return "MaEMRES";              break;
+     case ( kXSecTwkDial_MvEMRES          ) : return "MvEMRES";              break;					      					      
      case ( kXSecTwkDial_MaCOHpi          ) : return "MaCOHpi";              break;
      case ( kXSecTwkDial_R0COHpi          ) : return "R0COHpi";              break;
      case ( kXSecTwkDial_RvpCC1pi         ) : return "NonRESBGvpCC1pi";      break;
@@ -251,6 +262,7 @@ public:
      case ( kXSecTwkDial_RnubarnuCC       ) : return "RnubarnuCC";           break;
      case ( kXSecTwkDial_DISNuclMod       ) : return "DISNuclMod";           break;
      case ( kXSecTwkDial_NC               ) : return "NC";                   break;
+     case ( kXSecTwkDial_EM               ) : return "EM";    	             break;
      case ( kHadrAGKYTwkDial_xF1pi        ) : return "AGKYxF1pi";            break;
      case ( kHadrAGKYTwkDial_pT1pi        ) : return "AGKYpT1pi";            break;
      case ( kHadrNuclTwkDial_FormZone     ) : return "FormZone";             break;
@@ -316,6 +328,11 @@ public:
        kXSecTwkDial_MvNCRESshape,
        kXSecTwkDial_MaNCRES,
        kXSecTwkDial_MvNCRES,
+       kXSecTwkDial_NormEMRES,
+       kXSecTwkDial_MaEMRESshape,
+       kXSecTwkDial_MvEMRESshape,
+       kXSecTwkDial_MaEMRES,
+       kXSecTwkDial_MvEMRES,
        kXSecTwkDial_MaCOHpi,
        kXSecTwkDial_R0COHpi,
        kXSecTwkDial_RvpCC1pi,

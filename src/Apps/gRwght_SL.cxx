@@ -83,6 +83,7 @@
 #include <fstream>
 #include <sstream>
 #include <cassert>
+#include <iomanip>
 
 #include <TSystem.h>
 #include <TFile.h>
@@ -123,8 +124,9 @@
 #include "RwCalculators/GReWeightNuXSecCCQEaxial.h"
 #include "RwCalculators/GReWeightNuXSecCCQEvec.h"
 #include "RwCalculators/GReWeightNuXSecNCRES.h"
+#include "RwCalculators/GReWeightNuXSecEMRES.h"
 #include "RwCalculators/GReWeightNuXSecDIS.h"
-
+#include "RwCalculators/GReWeightNuXSecHelper.h"
 #include "RwCalculators/GReWeightINukeParams.h"
 #include "RwCalculators/GReWeightNuXSecNC.h"
 #include "RwCalculators/GReWeightXSecEmpiricalMEC.h"
@@ -232,6 +234,7 @@ int main(int argc, char ** argv)
   rw.AdoptWghtCalc( "xsec_ccqe_vec",   new GReWeightNuXSecCCQEvec   );
   rw.AdoptWghtCalc( "xsec_ccres",      new GReWeightNuXSecCCRES     );
   rw.AdoptWghtCalc( "xsec_ncres",      new GReWeightNuXSecNCRES     );
+  rw.AdoptWghtCalc( "xsec_emres",      new GReWeightNuXSecEMRES     );
   rw.AdoptWghtCalc( "xsec_nonresbkg",  new GReWeightNonResonanceBkg );
   rw.AdoptWghtCalc( "xsec_coh",        new GReWeightNuXSecCOH       );
   rw.AdoptWghtCalc( "xsec_dis",        new GReWeightNuXSecDIS       );
@@ -282,6 +285,14 @@ int main(int argc, char ** argv)
      GReWeightNuXSecNCRES * rwncres =
         dynamic_cast<GReWeightNuXSecNCRES *> (rw.WghtCalc("xsec_ncres"));
      rwncres->SetMode(GReWeightNuXSecNCRES::kModeMaMv);
+  }
+
+  if ( gOptSyst == kXSecTwkDial_MaEMRES ||
+       gOptSyst == kXSecTwkDial_MvEMRES    ) {
+     // As above, but for the GReWeightNuXSecNCRES weight calculator
+     GReWeightNuXSecEMRES * rwemres =
+        dynamic_cast<GReWeightNuXSecEMRES *> (rw.WghtCalc("xsec_emres"));
+     rwemres->SetMode(GReWeightNuXSecEMRES::kModeMaMv);
   }
 
   if ( gOptSyst == kXSecTwkDial_AhtBYshape  ||

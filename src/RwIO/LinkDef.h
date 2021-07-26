@@ -30,6 +30,7 @@
 //#pragma link C++ class genie::rew::GReWeightNuXSecCCQEaxial;
 //#pragma link C++ class genie::rew::GReWeightNuXSecCCRES;
 //#pragma link C++ class genie::rew::GReWeightNuXSecNCRES;
+//#pragma link C++ class genie:rew::GReWeightNuXSecEMRES;
 //#pragma link C++ class genie::rew::GReWeightNuXSecCOH;
 //#pragma link C++ class genie::rew::GReWeightNuXSecDIS;
 //#pragma link C++ class genie::rew::GReWeightNuXSecNC;

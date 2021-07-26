@@ -104,6 +104,7 @@
 #include "RwCalculators/GReWeightNuXSecCCQEvec.h"
 #include "RwCalculators/GReWeightNuXSecCCRES.h"
 #include "RwCalculators/GReWeightNuXSecNCRES.h"
+#include "RwCalculators/GReWeightNuXSecEMRES.h"
 #include "RwCalculators/GReWeightNuXSecDIS.h"
 #include "RwCalculators/GReWeightNuXSecCOH.h"
 #include "RwCalculators/GReWeightResonanceDecay.h"
@@ -675,6 +676,13 @@ bool FindIncompatibleSystematics(vector<GSyst_t> lsyst)
   GSyst_t ncres_shp_norm[3]
     = { kXSecTwkDial_NormNCRES,   kXSecTwkDial_MaNCRESshape,
         kXSecTwkDial_MvNCRESshape };
+
+  // EM Res
+  GSyst_t emres_shp[2]
+    = { kXSecTwkDial_MaEMRES,     kXSecTwkDial_MvEMRES };
+  GSyst_t emres_shp_norm[3]
+    = { kXSecTwkDial_NormEMRES,   kXSecTwkDial_MaEMRESshape,
+        kXSecTwkDial_MvEMRESshape };
 
   //
   // Sort systematics by mode (it0)
