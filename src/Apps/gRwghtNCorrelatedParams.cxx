@@ -679,10 +679,9 @@ bool FindIncompatibleSystematics(vector<GSyst_t> lsyst)
 
   // EM Res
   GSyst_t emres_shp[2]
-    = { kXSecTwkDial_MaEMRES,     kXSecTwkDial_MvEMRES };
+    = { kXSecTwkDial_MvEMRES };
   GSyst_t emres_shp_norm[3]
-    = { kXSecTwkDial_NormEMRES,   kXSecTwkDial_MaEMRESshape,
-        kXSecTwkDial_MvEMRESshape };
+    = { kXSecTwkDial_NormEMRES,   kXSecTwkDial_MvEMRESshape };
 
   //
   // Sort systematics by mode (it0)
