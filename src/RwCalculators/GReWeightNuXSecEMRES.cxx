@@ -68,6 +68,7 @@ bool GReWeightNuXSecEMRES::IsHandled(GSyst_t syst) const
    switch(syst) {
 
      case ( kXSecTwkDial_NormEMRES    ) :
+     case ( kXSecTwkDial_MaEMRESshape ) :
      case ( kXSecTwkDial_MvEMRESshape ) :
        if(fMode==kModeNormAndMaMvShape) {
           handle = true;
@@ -76,6 +77,7 @@ bool GReWeightNuXSecEMRES::IsHandled(GSyst_t syst) const
        }
        break;
 
+     case ( kXSecTwkDial_MaEMRES ) :
      case ( kXSecTwkDial_MvEMRES ) :
        if(fMode==kModeMaMv) {
           handle = true;
@@ -111,6 +113,10 @@ void GReWeightNuXSecEMRES::SetSystematic(GSyst_t syst, double twk_dial)
     case ( kXSecTwkDial_NormEMRES ) :
       fNormTwkDial = twk_dial;
       break;
+    case ( kXSecTwkDial_MaEMRESshape ) :
+    case ( kXSecTwkDial_MaEMRES ) :
+      fMaTwkDial = twk_dial;
+      break;
     case ( kXSecTwkDial_MvEMRESshape ) :
     case ( kXSecTwkDial_MvEMRES ) :
       fMvTwkDial = twk_dial;
@@ -137,22 +143,28 @@ void GReWeightNuXSecEMRES::Reconfigure(void)
   GSystUncertainty * fracerr = GSystUncertainty::Instance();
 
   if(fMode==kModeMaMv) {
+     double fracerr_ma = fracerr->OneSigmaErr(kXSecTwkDial_MaEMRES);
      double fracerr_mv = fracerr->OneSigmaErr(kXSecTwkDial_MvEMRES);
+     fMaCurr = fMaDef * (1. + fMaTwkDial * fracerr_ma);
      fMvCurr = fMvDef * (1. + fMvTwkDial * fracerr_mv);
   }
   else
   if(fMode==kModeNormAndMaMvShape) {
      double fracerr_norm = fracerr->OneSigmaErr(kXSecTwkDial_NormEMRES);
+     double fracerr_mash = fracerr->OneSigmaErr(kXSecTwkDial_MaEMRESshape);
      double fracerr_mvsh = fracerr->OneSigmaErr(kXSecTwkDial_MvEMRESshape);
      fNormCurr = fNormDef * (1. + fNormTwkDial * fracerr_norm);
+     fMaCurr   = fMaDef   * (1. + fMaTwkDial   * fracerr_mash);
      fMvCurr   = fMvDef   * (1. + fMvTwkDial   * fracerr_mvsh);
   }
 
   fNormCurr = TMath::Max(0., fNormCurr);
+  fMaCurr   = TMath::Max(0., fMaCurr  );
   fMvCurr   = TMath::Max(0., fMvCurr  );
 
   Registry & r = *fXSecModelConfig;
 
+  r.Set(fMaPath, fMaCurr);
   r.Set(fMvPath, fMvCurr);
   fXSecModel->Configure(r);
 
@@ -259,24 +271,18 @@ double GReWeightNuXSecEMRES::CalcWeightMaMv(const genie::EventRecord & event)
   const KinePhaseSpace_t phase_space = kPSWQ2fE;
 
   double old_xsec   = event.DiffXSec();
-  double calc_old_xsec = fXSecModelDef->XSec(interaction, phase_space);
-  if (std::abs(calc_old_xsec - old_xsec)/old_xsec > controls::kASmallNum) {
+  if (!fUseOldWeightFromFile || fNWeightChecksDone < fNWeightChecksToDo) {
+    double calc_old_xsec = fXSecModelDef->XSec(interaction, phase_space);
+    if (fNWeightChecksDone < fNWeightChecksToDo) {
+      if (std::abs(calc_old_xsec - old_xsec)/old_xsec > controls::kASmallNum) {
         LOG("ReW",pWARN) << "Warning - default dxsec does not match dxsec saved in tree. Does the config match?";
       }
-
-///  double old_xsec   = event.DiffXSec();
-///  if (!fUseOldWeightFromFile || fNWeightChecksDone < fNWeightChecksToDo) {
-///    double calc_old_xsec = fXSecModelDef->XSec(interaction, phase_space);
-///    if (fNWeightChecksDone < fNWeightChecksToDo) {
-///      if (std::abs(calc_old_xsec - old_xsec)/old_xsec > controls::kASmallNum) {
-///        LOG("ReW",pWARN) << "Warning - default dxsec does not match dxsec saved in tree. Does the config match?";
-///      }
-///      fNWeightChecksDone++;
-///    }
-///    if(!fUseOldWeightFromFile) {
-///      old_xsec = calc_old_xsec;
-///    }
-///  }
+      fNWeightChecksDone++;
+    }
+    if(!fUseOldWeightFromFile) {
+      old_xsec = calc_old_xsec;
+    }
+  }
 
   double old_weight = event.Weight();
   double new_xsec   = fXSecModel->XSec(interaction, phase_space);

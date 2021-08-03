@@ -285,7 +285,8 @@ int main(int argc, char ** argv)
      rwncres->SetMode(GReWeightNuXSecNCRES::kModeMaMv);
   }
 
-  if ( gOptSyst == kXSecTwkDial_MvEMRES    ) {
+  if ( gOptSyst == kXSecTwkDial_MaEMRES ||
+       gOptSyst == kXSecTwkDial_MvEMRES    ) {
      // As above, but for the GReWeightNuXSecEMRES weight calculator
      GReWeightNuXSecEMRES * rwemres =
         dynamic_cast<GReWeightNuXSecEMRES *> (rw.WghtCalc("xsec_emres"));

@@ -287,8 +287,9 @@ int main(int argc, char ** argv)
      rwncres->SetMode(GReWeightNuXSecNCRES::kModeMaMv);
   }
 
-  if ( gOptSyst == kXSecTwkDial_MvEMRES    ) {
-     // As above, but for the GReWeightNuXSecEMRES weight calculator
+  if ( gOptSyst == kXSecTwkDial_MaEMRES ||
+       gOptSyst == kXSecTwkDial_MvEMRES    ) {
+     // As above, but for the GReWeightNuXSecNCRES weight calculator
      GReWeightNuXSecEMRES * rwemres =
         dynamic_cast<GReWeightNuXSecEMRES *> (rw.WghtCalc("xsec_emres"));
      rwemres->SetMode(GReWeightNuXSecEMRES::kModeMaMv);
@@ -441,29 +442,29 @@ void GetCommandLineArgs(int argc, char ** argv)
     << "Input event range: " << gOptNEvt1 << ", " << gOptNEvt2;
 
   // // get the number of tweak dials to scan
-  if(parser.OptionExists('t')) {
-    LOG("grwght1scan", pINFO)
-       << "Reading number of tweak dial values";
-    gOptInpNTwk = parser.ArgAsInt('t');
-    if(gOptInpNTwk % 2 == 0)
-    {
-      gOptInpNTwk+=1;
-    }
-    if(gOptInpNTwk < 3)
-    {
-      LOG("grwght1scan", pFATAL)
-         << "Specified number of tweak dial is too low, min value is 3 - Exiting";
-      gAbortingInErr = true;
-      PrintSyntax();
-      exit(1);
-    }
-  } else {
-     LOG("grwght1scan", pFATAL)
-       << "Unspecified number of tweak dials - Exiting";
-     gAbortingInErr = true;
-     PrintSyntax();
-     exit(1);
-  }
+  // if(parser.OptionExists('t')) {
+  //   LOG("grwght1scan", pINFO)
+  //      << "Reading number of tweak dial values";
+  //   gOptInpNTwk = parser.ArgAsInt('t');
+  //   if(gOptInpNTwk % 2 == 0)
+  //   {
+  //     gOptInpNTwk+=1;
+  //   }
+  //   if(gOptInpNTwk < 3)
+  //   {
+  //     LOG("grwght1scan", pFATAL)
+  //        << "Specified number of tweak dial is too low, min value is 3 - Exiting";
+  //     gAbortingInErr = true;
+  //     PrintSyntax();
+  //     exit(1);
+  //   }
+  // } else {
+  //    LOG("grwght1scan", pFATAL)
+  //      << "Unspecified number of tweak dials - Exiting";
+  //    gAbortingInErr = true;
+  //    PrintSyntax();
+  //    exit(1);
+  // }
 
   // get the systematics
   if(parser.OptionExists('s')) {

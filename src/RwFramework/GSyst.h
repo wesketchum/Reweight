@@ -61,9 +61,11 @@ typedef enum EGSyst {
   kXSecTwkDial_MaNCRESshape,      ///< tweak Ma NCRES, affects d2sigma(NCRES)/dWdQ2 in shape only (normalized to constant integral)
   kXSecTwkDial_MvNCRESshape,      ///< tweak Mv NCRES, affects d2sigma(NCRES)/dWdQ2 in shape only (normalized to constant integral)
   kXSecTwkDial_NormEMRES, 	  ///< tweak EMRES normalization
+  kXSecTwkDial_MaEMRESshape,      ///< tweak Ma EMRES, affects d2sigma(EMRES)/dWdQ2 in shape only (normalized to constant integral) 
   kXSecTwkDial_MvEMRESshape,      ///< tweak Mv EMRES, affects d2sigma(EMRES)/dWdQ2 in shape only (normalized to constant integral)
   kXSecTwkDial_MaNCRES,           ///< tweak Ma NCRES, affects d2sigma(NCRES)/dWdQ2 both in shape and normalization
   kXSecTwkDial_MvNCRES,           ///< tweak Mv NCRES, affects d2sigma(NCRES)/dWdQ2 both in shape and normalization
+  kXSecTwkDial_MaEMRES,		  ///< tweak Ma EMRES, affects d2sigma(EMRES)/dWdQ2 both in shape and normazliation
   kXSecTwkDial_MvEMRES, 	  ///< tweak Mv EMRES, affects d2sigma(EMRES)/dWdQ2 both in shape and normazliation
   // Coherent pion production tweaking parameters:
   kXSecTwkDial_MaCOHpi,           ///< tweak Ma for COH pion production
@@ -226,7 +228,9 @@ public:
      case ( kXSecTwkDial_MaNCRES          ) : return "MaNCRES";              break;
      case ( kXSecTwkDial_MvNCRES          ) : return "MvNCRES";              break;					      					      
      case ( kXSecTwkDial_NormEMRES        ) : return "NormEMRES";            break;
+     case ( kXSecTwkDial_MaEMRESshape     ) : return "MaEMRESshape";         break;
      case ( kXSecTwkDial_MvEMRESshape     ) : return "MvEMRESshape";         break;
+     case ( kXSecTwkDial_MaEMRES          ) : return "MaEMRES";              break;
      case ( kXSecTwkDial_MvEMRES          ) : return "MvEMRES";              break;					      					      
      case ( kXSecTwkDial_MaCOHpi          ) : return "MaCOHpi";              break;
      case ( kXSecTwkDial_R0COHpi          ) : return "R0COHpi";              break;
@@ -325,7 +329,9 @@ public:
        kXSecTwkDial_MaNCRES,
        kXSecTwkDial_MvNCRES,
        kXSecTwkDial_NormEMRES,
+       kXSecTwkDial_MaEMRESshape,
        kXSecTwkDial_MvEMRESshape,
+       kXSecTwkDial_MaEMRES,
        kXSecTwkDial_MvEMRES,
        kXSecTwkDial_MaCOHpi,
        kXSecTwkDial_R0COHpi,
