@@ -312,7 +312,7 @@ int main(int argc, char ** argv)
   // for (int ith_dial = 0; ith_dial < n_points; ith_dial++) {
 
   // Set non-default values and re-configure.
-  double twk_dial = 1.0;
+  double twk_dial = 4.0;
   LOG("grwght1scan", pNOTICE)
      << "\n\nReconfiguring systematic: " << GSyst::AsString(gOptSyst)
      << " - Setting tweaking dial to: " << twk_dial;
