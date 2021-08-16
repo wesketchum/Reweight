@@ -287,8 +287,7 @@ int main(int argc, char ** argv)
      rwncres->SetMode(GReWeightNuXSecNCRES::kModeMaMv);
   }
 
-  if ( gOptSyst == kXSecTwkDial_MaEMRES ||
-       gOptSyst == kXSecTwkDial_MvEMRES    ) {
+  if ( gOptSyst == kXSecTwkDial_MvEMRES    ) {
      // As above, but for the GReWeightNuXSecNCRES weight calculator
      GReWeightNuXSecEMRES * rwemres =
         dynamic_cast<GReWeightNuXSecEMRES *> (rw.WghtCalc("xsec_emres"));
@@ -312,7 +311,7 @@ int main(int argc, char ** argv)
   // for (int ith_dial = 0; ith_dial < n_points; ith_dial++) {
 
   // Set non-default values and re-configure.
-  double twk_dial = 4.0;
+  double twk_dial = 4.8;
   LOG("grwght1scan", pNOTICE)
      << "\n\nReconfiguring systematic: " << GSyst::AsString(gOptSyst)
      << " - Setting tweaking dial to: " << twk_dial;
