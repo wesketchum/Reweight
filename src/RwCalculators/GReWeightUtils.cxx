@@ -321,7 +321,7 @@ int genie::utils::rew::GetParticleA( int pdg ) {
 void genie::utils::rew::TallyAQ( const genie::GHepRecord& event,
     genie::GHepParticle* p, int& A, int& Q )
 {
-  LOG( "ReW", pDEBUG ) << "Checking particle " << p.Name();
+  LOG( "ReW", pDEBUG ) << "Checking particle " << p->Name();
   int first_daughter_idx = p->FirstDaughter();
   if ( first_daughter_idx < 0 ) return;
   int last_daughter_idx = p->LastDaughter();
