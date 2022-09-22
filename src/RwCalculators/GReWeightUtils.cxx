@@ -319,12 +319,12 @@ int genie::utils::rew::GetParticleA( int pdg ) {
 // charge) for all "stable final state" daughters of a given GHepParticle in a
 // GHepRecord.
 void genie::utils::rew::TallyAQ( const genie::GHepRecord& event,
-    const genie::GHepParticle& p, int& A, int& Q )
+    genie::GHepParticle* p, int& A, int& Q )
 {
   LOG( "ReW", pDEBUG ) << "Checking particle " << p.Name();
-  int first_daughter_idx = p.FirstDaughter();
+  int first_daughter_idx = p->FirstDaughter();
   if ( first_daughter_idx < 0 ) return;
-  int last_daughter_idx = p.LastDaughter();
+  int last_daughter_idx = p->LastDaughter();
   for ( int idx = first_daughter_idx; idx <= last_daughter_idx; ++idx ) {
     genie::GHepParticle* d = event.Particle( idx );
     LOG( "ReW", pDEBUG ) << "Had daughter " << d->Name();
@@ -335,6 +335,6 @@ void genie::utils::rew::TallyAQ( const genie::GHepRecord& event,
       Q += dQ;
     }
     // Use recursion to check daughters-of-daughters, etc.
-    genie::utils::rew::TallyAQ( event, *d, A, Q );
+    genie::utils::rew::TallyAQ( event, d, A, Q );
   }
 }

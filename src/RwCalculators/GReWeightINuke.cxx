@@ -239,7 +239,7 @@ double GReWeightINuke::CalcWeight(const EventRecord & event)
      // Calculate how the nuclear (A, Z) values changed due to FSIs experienced
      // by the current particle
      int deltaA, deltaZ;
-     this->CalcDeltaAZ( event, *p, deltaA, deltaZ );
+     this->CalcDeltaAZ( event, p, deltaA, deltaZ );
 
      // Kaon FSIs can't currently be reweighted. Just update (A, Z) based on
      // the particle's daughters and move on.
@@ -328,7 +328,7 @@ double GReWeightINuke::CalcWeight(const EventRecord & event)
 }
 //_______________________________________________________________________________________
 void GReWeightINuke::CalcDeltaAZ( const EventRecord& event,
-  const GHepParticle& p, int& deltaA, int& deltaZ )
+  GHepParticle* p, int& deltaA, int& deltaZ )
 {
   // Compute the total nucleon number and electric charge (in units of the up
   // quark charge) for all "stable final state" daughters of the current
@@ -337,9 +337,9 @@ void GReWeightINuke::CalcDeltaAZ( const EventRecord& event,
   int myQ = 0;
   genie::utils::rew::TallyAQ( event, p, myA, myQ );
 
-  deltaA = genie::utils::rew::GetParticleA( p.Pdg() ) - myA;
+  deltaA = genie::utils::rew::GetParticleA( p->Pdg() ) - myA;
   // Convert to units of the elementary charge
-  deltaZ = ( p.Charge() - myQ ) / 3;
+  deltaZ = ( p->Charge() - myQ ) / 3;
 
   // Deal with apparent charge conservation issues in the absorption fate. Note
   // that there are also some failure modes for "too few nucleon" cases which
@@ -347,10 +347,10 @@ void GReWeightINuke::CalcDeltaAZ( const EventRecord& event,
   // address those here since the information is simply lost. The good news is
   // that it shouldn't be a big deal for FSI reweighting.
   // -- S. Gardiner, 19 June 2021
-  if ( p.RescatterCode() == genie::kIHAFtAbs ) {
+  if ( p->RescatterCode() == genie::kIHAFtAbs ) {
 
-    if ( p.Pdg() == genie::kPdgPiM ) {
-      int daught = p.FirstDaughter();
+    if ( p->Pdg() == genie::kPdgPiM ) {
+      int daught = p->FirstDaughter();
       int d_pdg = event.Particle( daught )->Pdg();
       // If the first daughter is a nucleon cluster, then a multinucleon
       // absorption reaction was simulated which doesn't suffer from the
@@ -360,8 +360,8 @@ void GReWeightINuke::CalcDeltaAZ( const EventRecord& event,
         && d_pdg != genie::kPdgPiM ) deltaZ--;
     } // Pi-
 
-    else if ( p.Pdg() == genie::kPdgKP ) {
-      int daught = p.FirstDaughter();
+    else if ( p->Pdg() == genie::kPdgKP ) {
+      int daught = p->FirstDaughter();
       if ( event.Particle(daught)->Pdg()
         == genie::kPdgCompNuclCluster )
       {

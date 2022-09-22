@@ -85,7 +85,7 @@ namespace rew   {
   // Sums the nucleon number and electric charge (in units of the up quark
   // charge) for all "stable final state" daughters of a given GHepParticle in a
   // GHepRecord.
-  void TallyAQ( const genie::GHepRecord& event, const genie::GHepParticle& p,
+  void TallyAQ( const genie::GHepRecord& event, genie::GHepParticle* p,
     int& A, int& Q );
 
 }  // rew   namespace
